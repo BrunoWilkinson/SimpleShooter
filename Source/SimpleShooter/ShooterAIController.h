@@ -19,4 +19,8 @@ protected:
 
 public:
 	virtual void Tick(float DeltaSeconds) override;
+
+private:
+	UPROPERTY(EditAnywhere)
+	float AcceptanceRadius = 200.f;
 };
