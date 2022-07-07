@@ -36,39 +36,55 @@ void AGun::PullTrigger()
 {
 	UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, Mesh, TEXT("MuzzleFlashSocket"));
 
-	APawn* OwnerPawn = Cast<APawn>(GetOwner());
-	if (OwnerPawn == nullptr)
-	{
-		return;
-	}
-	AController* OwnerController = OwnerPawn->GetController();
-	if (OwnerController == nullptr)
-	{
-		return;
-	}
-
-	FVector PlayerViewPointLocation;
-	FRotator PlayerViewPointRotation;
-	OwnerController->GetPlayerViewPoint(PlayerViewPointLocation, PlayerViewPointRotation);
-
-	FVector End = PlayerViewPointLocation + PlayerViewPointRotation.Vector() * MaxRange;
 	FHitResult Hit;
-	FCollisionQueryParams Params;
-	Params.AddIgnoredActor(this);
-	Params.AddIgnoredActor(GetOwner());
-
-	bool bSuccess = GetWorld()->LineTraceSingleByChannel(Hit, PlayerViewPointLocation, End, ECollisionChannel::ECC_GameTraceChannel1, Params);
+	FVector ShotDirection;
+	bool bSuccess = GunTrace(Hit, ShotDirection);
 
 	if (bSuccess)
 	{
-		FVector ShotDirection = -PlayerViewPointRotation.Vector();
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactEffect, Hit.Location, ShotDirection.Rotation());
 		FPointDamageEvent DamageEvent(Damage, Hit, ShotDirection, nullptr);
 		AActor* HitActor = Hit.GetActor();
 		if (HitActor)
 		{
+			AController* OwnerController = GetOwnerController();
+			if (OwnerController == nullptr)
+			{
+				return;
+			}
 			HitActor->TakeDamage(Damage, DamageEvent, OwnerController, this);
 		}
 	}
+}
+
+AController* AGun::GetOwnerController() const
+{
+	APawn* OwnerPawn = Cast<APawn>(GetOwner());
+	if (OwnerPawn == nullptr)
+	{
+		return nullptr;
+	}
+	return OwnerPawn->GetController();
+}
+
+bool AGun::GunTrace(FHitResult& Hit, FVector& ShotDirection)
+{
+	AController* OwnerController = GetOwnerController();
+	if (OwnerController == nullptr)
+	{
+		return false;
+	}
+
+	FVector PlayerViewPointLocation;
+	FRotator PlayerViewPointRotation;
+	OwnerController->GetPlayerViewPoint(PlayerViewPointLocation, PlayerViewPointRotation);
+	ShotDirection = -PlayerViewPointRotation.Vector();
+
+	FVector End = PlayerViewPointLocation + PlayerViewPointRotation.Vector() * MaxRange;
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(this);
+	Params.AddIgnoredActor(GetOwner());
+
+	return GetWorld()->LineTraceSingleByChannel(Hit, PlayerViewPointLocation, End, ECollisionChannel::ECC_GameTraceChannel1, Params);
 }
 
