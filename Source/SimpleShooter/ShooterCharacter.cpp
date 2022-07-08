@@ -41,6 +41,11 @@ float AShooterCharacter::GetHealthPercent() const
 	return Health / MaxHealth;
 }
 
+AGun* AShooterCharacter::GetGun() const
+{
+	return Gun;
+}
+
 // Called every frame
 void AShooterCharacter::Tick(float DeltaTime)
 {

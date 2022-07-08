@@ -22,25 +22,49 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION(BlueprintPure)
+	float GetAmmoCount() const;
+
 	void PullTrigger();
+	
 
 private:
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* Root;
+
 	UPROPERTY(VisibleAnywhere)
 	USkeletalMeshComponent* Mesh;
+
 	UPROPERTY(EditAnywhere)
 	UParticleSystem* MuzzleFlash;
+
 	UPROPERTY(EditAnywhere)
 	USoundBase* MuzzleSound;
+
 	UPROPERTY(EditAnywhere)
 	UParticleSystem* ImpactEffect;
+
 	UPROPERTY(EditAnywhere)
 	USoundBase* ImpactSound;
+
 	UPROPERTY(EditAnywhere)
-	float MaxRange = 1000;
+	float MaxRange = 1000.f;
+
 	UPROPERTY(EditAnywhere)
-	float Damage = 10;
+	float Damage = 10.f;
+
+	UPROPERTY(EditAnywhere)
+	float Ammo = 15.f;
+
+	UPROPERTY(EditAnywhere)
+	float ReloadTime = 1.f;
+
+	bool bIsReloading = false;
+
 	bool GunTrace(FHitResult& Hit, FVector& ShotDirection);
+
+	void AddAmmo();
+
 	AController* GetOwnerController() const;
 };

@@ -4,6 +4,7 @@
 #include "Gun.h"
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
+#include "ShooterCharacter.h"
 
 // Sets default values
 AGun::AGun()
@@ -32,8 +33,26 @@ void AGun::Tick(float DeltaTime)
 
 }
 
+float AGun::GetAmmoCount() const
+{
+	return Ammo;
+}
+
 void AGun::PullTrigger()
 {
+	if (bIsReloading)
+	{
+		return;
+	}
+
+	if (Ammo == 0)
+	{
+		bIsReloading = true;
+		FTimerHandle TimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AGun::AddAmmo, ReloadTime, false);
+		return;
+	}
+
 	UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, Mesh, TEXT("MuzzleFlashSocket"));
 	UGameplayStatics::SpawnSoundAttached(MuzzleSound, Mesh, TEXT("MuzzleFlashSocket"));
 
@@ -58,6 +77,7 @@ void AGun::PullTrigger()
 			HitActor->TakeDamage(Damage, DamageEvent, OwnerController, this);
 		}
 	}
+	Ammo--;
 }
 
 AController* AGun::GetOwnerController() const
@@ -89,5 +109,11 @@ bool AGun::GunTrace(FHitResult& Hit, FVector& ShotDirection)
 	Params.AddIgnoredActor(GetOwner());
 
 	return GetWorld()->LineTraceSingleByChannel(Hit, PlayerViewPointLocation, End, ECollisionChannel::ECC_GameTraceChannel1, Params);
+}
+
+void AGun::AddAmmo()
+{
+	Ammo = 15;
+	bIsReloading = false;
 }
 
