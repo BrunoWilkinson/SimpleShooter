@@ -118,6 +118,7 @@ void AGun::Reload()
 
 void AGun::AddAmmo()
 {
+	UGameplayStatics::SpawnSoundAttached(ReloadSound, Mesh, TEXT("MuzzleFlashSocket"));
 	Ammo = 15;
 	bIsReloading = false;
 }

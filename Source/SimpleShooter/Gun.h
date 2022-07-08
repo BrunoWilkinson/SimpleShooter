@@ -53,6 +53,9 @@ private:
 	USoundBase* ImpactSound;
 
 	UPROPERTY(EditAnywhere)
+	USoundBase* ReloadSound;
+
+	UPROPERTY(EditAnywhere)
 	float MaxRange = 1000.f;
 
 	UPROPERTY(EditAnywhere)
