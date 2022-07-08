@@ -27,6 +27,10 @@ public:
 	float GetAmmoCount() const;
 
 	void PullTrigger();
+
+	void Reload();
+
+	void AddAmmo();
 	
 
 private:
@@ -63,8 +67,6 @@ private:
 	bool bIsReloading = false;
 
 	bool GunTrace(FHitResult& Hit, FVector& ShotDirection);
-
-	void AddAmmo();
 
 	AController* GetOwnerController() const;
 };

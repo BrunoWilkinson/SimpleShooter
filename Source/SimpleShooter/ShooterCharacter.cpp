@@ -67,6 +67,7 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction(TEXT("Fire"), EInputEvent::IE_Pressed, this, &AShooterCharacter::Shoot);
+	PlayerInputComponent->BindAction(TEXT("Reload"), EInputEvent::IE_Pressed, this, &AShooterCharacter::Reload);
 }
 
 float AShooterCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -112,6 +113,11 @@ void AShooterCharacter::LookRightRate(float AxisValue)
 void AShooterCharacter::Shoot()
 {
 	Gun->PullTrigger();
+}
+
+void AShooterCharacter::Reload()
+{
+	Gun->Reload();
 }
 
 float AShooterCharacter::RateWithDeltaTime(float AxisValue)

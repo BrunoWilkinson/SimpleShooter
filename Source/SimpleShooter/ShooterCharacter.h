@@ -41,6 +41,8 @@ public:
 	
 	void Shoot();
 
+	void Reload();
+
 private:
 	void MoveForward(float AxisValue);
 

@@ -47,9 +47,7 @@ void AGun::PullTrigger()
 
 	if (Ammo == 0)
 	{
-		bIsReloading = true;
-		FTimerHandle TimerHandle;
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AGun::AddAmmo, ReloadTime, false);
+		Reload();
 		return;
 	}
 
@@ -109,6 +107,13 @@ bool AGun::GunTrace(FHitResult& Hit, FVector& ShotDirection)
 	Params.AddIgnoredActor(GetOwner());
 
 	return GetWorld()->LineTraceSingleByChannel(Hit, PlayerViewPointLocation, End, ECollisionChannel::ECC_GameTraceChannel1, Params);
+}
+
+void AGun::Reload()
+{
+	bIsReloading = true;
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AGun::AddAmmo, ReloadTime, false);
 }
 
 void AGun::AddAmmo()
