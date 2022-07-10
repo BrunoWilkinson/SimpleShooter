@@ -11,6 +11,6 @@ Controls:
 
 itch.io:
 
-https://github.com/BrunoWilkinson/SimpleShooter
+https://brunowilkinson.itch.io/simple-shooter
 
 v1.0.0
