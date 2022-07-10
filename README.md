@@ -1,6 +1,6 @@
 # SimpleShooter
 
-Simple FPS with a Kill em all mode.
+Simple third-person shooter game with a Kill em all mode.
 
 Controls:
 
